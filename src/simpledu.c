@@ -6,7 +6,8 @@ int main(int argc, char const *argv[])
 
     simpledu *sd = createSimpledu();
 
-    printSimpledu(sd);
+    //printSimpledu(sd);
+    printUsage();
 
     destroySimpledu(sd);
 
@@ -17,7 +18,7 @@ simpledu *createSimpledu()
 {
     simpledu *sd = (simpledu *)malloc(sizeof(simpledu));
 
-    sd->count_links_flag = 1;
+    sd->count_links_flag = 0;
     sd->all_flag = 0;
     sd->block_size_flag = 0;
     sd->byte_size_flag = 0;
@@ -29,6 +30,37 @@ simpledu *createSimpledu()
     sd->block_size = 0;
 
     return sd;
+}
+
+int fillSimpledu(simpledu *sd, int argc, char const *argv[])
+{
+    if (argc < 2)
+    {
+        printUsage();
+        return 1;
+    }
+    else
+    {
+        if (strcmp(argv[1], C_LINKS) != 0)
+        {
+            printUsage();
+            return 1;
+        }
+        else
+        {
+            sd->count_links_flag = 1;
+            if (argc == 2)
+            {
+                return 0;
+            }
+            else
+            {
+                for (size_t i = 2; i < argc; i++)
+                {
+                                }
+            }
+        }
+    }
 }
 
 void printSimpledu(simpledu *sd)
@@ -53,4 +85,9 @@ void destroySimpledu(simpledu *sd)
     }
 
     free(sd);
+}
+
+void printUsage()
+{
+    printf("Usage: ./simpledu -l <path> <-a|-all> <-b|-bytes> <-B size|--block-size=SIZE> <-L|--count-links> <-S|--separate dirs> <--max-depth=N>\n");
 }

@@ -7,6 +7,14 @@
 
 #define MAX_PATH_LENGTH 256
 
+#define ALL "-a"
+#define BYTES "-b"
+#define BLOCK_SIZE "-B"
+#define C_LINKS "-l"
+#define SY_LINKS "-L"
+#define SEP_DIRS "-S"
+#define MAX_DEPTH "--max-depth="
+
 typedef struct
 {
     int count_links_flag;
@@ -21,12 +29,41 @@ typedef struct
     unsigned int max_depth;
 } simpledu;
 
+/** 
+* @brief: Creates an instance of the struct simpledu
+*
+* @returns: A pointer to the created struct
+*/
 simpledu *createSimpledu();
 
+/**
+* @brief: Prints the contents of a simpledu struct 
+*/
 void printSimpledu(simpledu *sd);
 
-int fillSimpledu(simpledu *sd);
+/**
+ * @brief: Parses the arguments from the console to a simpledu struct
+ * 
+ * @todo: finish parsing the other elements past -l 
+ * 
+ * @param sd: The struct to be filled
+ * @param argc: The amount of arguments of the console
+ * @param argv: The strings of those same arguments
+ * 
+ * @return: Returns 0 if successful and 1 if not  
+ */
+int fillSimpledu(simpledu *sd, int argc, char const *argv[]);
 
+/**
+ * @brief: Destroys an instance of a simpledu struct
+ * 
+ * @param sd: The instance of simpledu
+ */
 void destroySimpledu(simpledu *sd);
+
+/**
+ * @brief: Prints the correct usage of the program
+ */
+void printUsage();
 
 #endif
