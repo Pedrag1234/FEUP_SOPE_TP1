@@ -55,11 +55,12 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
             }
             else
             {
-                for (size_t i = 2; i < argc; i++)
+                for (int i = 2; i < argc; i++)
                 {
-                                }
+                }
             }
         }
+        return 0;
     }
 }
 
