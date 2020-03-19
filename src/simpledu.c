@@ -8,9 +8,14 @@ int main(int argc, char const *argv[])
 
     //printSimpledu(sd);
     //printUsage();
-    printf("Is number: %d\n", isNumber("14253"));
-    printf("Is number: %d\n", isNumber("Atomate"));
-    printf("Is number: %d\n", isNumber("12eu1peixe"));
+    printf("Is %s path? It's %d\n", ALL, isPath(ALL));
+    printf("Is %s path? It's %d\n", BYTES, isPath(BYTES));
+    printf("Is %s path? It's %d\n", BLOCK_SIZE, isPath(BLOCK_SIZE));
+    printf("Is %s path? It's %d\n", SY_LINKS, isPath(SY_LINKS));
+    printf("Is %s path? It's %d\n", SEP_DIRS, isPath(SEP_DIRS));
+    printf("Is %s path? It's %d\n", MAX_DEPTH, isPath(MAX_DEPTH));
+    printf("Is %s path? It's %d\n", "123654", isPath("123654"));
+    printf("Is %s path? It's %d\n", "mYmilkShake", isPath("mYmilkShake"));
 
     destroySimpledu(sd);
 
@@ -35,23 +40,13 @@ simpledu *createSimpledu()
     return sd;
 }
 
-int isNumber(char *string)
+int isPath(char *path)
 {
-    int s_size = strlen(string);
+    if (strcmp(path, ALL) != 0 && strcmp(path, BYTES) != 0 && strcmp(path, BLOCK_SIZE) != 0 && isNumber(path) != 0 && strcmp(path, SY_LINKS) != 0 && strcmp(path, SEP_DIRS) && strstr(path, MAX_DEPTH) == NULL)
+        return 0;
 
-    for (int i = 0; i < s_size; i++)
-    {
-        //printf("Char %c and isDigit %d\n", string[i], isdigit(string[i]));
-        if (isdigit(string[i]) == 0)
-            return 1;
-    }
-    return 0;
+    return 1;
 }
-
-/*int isPath(char *path, int i)
-{
-    if (i == 2 && strcmp(path, ALL) != 0 && strcmp(path, BYTES) != 0 && strcmp(path, BLOCK_SIZE) != 0 &&)
-}*/
 
 int fillSimpledu(simpledu *sd, int argc, char const *argv[])
 {
@@ -73,6 +68,10 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
 
             for (int i = 2; i < argc; i++)
             {
+                if (isPath(argv[i]) == 0 && i == 2)
+                {
+                    strcpy(sd->path, argv[i]);
+                }
             }
         }
         return 0;
