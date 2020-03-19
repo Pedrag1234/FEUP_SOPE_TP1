@@ -6,16 +6,10 @@ int main(int argc, char const *argv[])
 
     simpledu *sd = createSimpledu();
 
-    //printSimpledu(sd);
+    fillSimpledu(sd, argc, argv);
+
+    printSimpledu(sd);
     //printUsage();
-    printf("Is %s path? It's %d\n", ALL, isPath(ALL));
-    printf("Is %s path? It's %d\n", BYTES, isPath(BYTES));
-    printf("Is %s path? It's %d\n", BLOCK_SIZE, isPath(BLOCK_SIZE));
-    printf("Is %s path? It's %d\n", SY_LINKS, isPath(SY_LINKS));
-    printf("Is %s path? It's %d\n", SEP_DIRS, isPath(SEP_DIRS));
-    printf("Is %s path? It's %d\n", MAX_DEPTH, isPath(MAX_DEPTH));
-    printf("Is %s path? It's %d\n", "123654", isPath("123654"));
-    printf("Is %s path? It's %d\n", "mYmilkShake", isPath("mYmilkShake"));
 
     destroySimpledu(sd);
 
@@ -40,12 +34,38 @@ simpledu *createSimpledu()
     return sd;
 }
 
-int isPath(char *path)
+int isPath(const char *path)
 {
     if (strcmp(path, ALL) != 0 && strcmp(path, BYTES) != 0 && strcmp(path, BLOCK_SIZE) != 0 && isNumber(path) != 0 && strcmp(path, SY_LINKS) != 0 && strcmp(path, SEP_DIRS) && strstr(path, MAX_DEPTH) == NULL)
         return 0;
 
     return 1;
+}
+
+int getMaxDepth(const char *string)
+{
+    if (strlen(string) <= strlen(MAX_DEPTH))
+    {
+        return -1;
+    }
+    else
+    {
+        char number[26];
+        subString(string, 12, strlen(string) - strlen(MAX_DEPTH), number);
+
+        //Remover este printf faz com que a funçaõ deixe de funcionar
+        printf("Number=> (%s,%ld)|| isNumber = %d\n", number, strlen(number), isNumber(number));
+
+        if (isNumber(number) == 0)
+        {
+            printf("Number = %s\n", number);
+            return atoi(number);
+        }
+        else
+        {
+            return -1;
+        }
+    }
 }
 
 int fillSimpledu(simpledu *sd, int argc, char const *argv[])
@@ -69,8 +89,48 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
             for (int i = 2; i < argc; i++)
             {
                 if (isPath(argv[i]) == 0 && i == 2)
-                {
                     strcpy(sd->path, argv[i]);
+
+                else if (strcmp(argv[i], ALL) == 0)
+                    sd->all_flag = 1;
+
+                else if (strcmp(argv[i], BYTES) == 0)
+                    sd->byte_size_flag = 1;
+
+                else if (strcmp(argv[i], BLOCK_SIZE) == 0)
+                {
+                    sd->block_size_flag = 1;
+
+                    if ((i + 1 >= argc) || isNumber(argv[i + 1]) != 0)
+                    {
+                        printUsage();
+                        return 1;
+                    }
+
+                    else
+                        sd->block_size = atoi(argv[i + 1]);
+                }
+
+                else if (strcmp(argv[i], SY_LINKS) == 0)
+                    sd->deference_flag = 1;
+
+                else if (strcmp(argv[i], SEP_DIRS) == 0)
+                    sd->directory_flag = 1;
+
+                else if (strstr(argv[i], MAX_DEPTH) != NULL)
+                {
+                    sd->max_depth_flag = 1;
+                    int j = getMaxDepth(argv[i]);
+
+                    if (j < 0)
+                    {
+                        printUsage();
+                        return 1;
+                    }
+                    else
+                    {
+                        sd->max_depth = j;
+                    }
                 }
             }
         }

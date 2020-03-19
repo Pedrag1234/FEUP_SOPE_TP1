@@ -77,6 +77,15 @@ void printUsage();
  * 
  * @return: Returns 0 if the string isn't equal to the program options and 1 if false
  */
-int isPath(char *path);
+int isPath(const char *path);
+
+/**
+ * @brief returns the value of the desired depth from the options
+ * 
+ * @param string: the string to extract the value
+ * 
+ * @return the value of the depth or -1 if something went wrong 
+ */
+int getMaxDepth(const char *string);
 
 #endif
