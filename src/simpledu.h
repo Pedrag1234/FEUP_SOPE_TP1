@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define MAX_PATH_LENGTH 256
 
@@ -65,5 +66,14 @@ void destroySimpledu(simpledu *sd);
  * @brief: Prints the correct usage of the program
  */
 void printUsage();
+
+/**
+ * @brief: checks if a string is made out entirely of digits
+ * 
+ * @param: string to be checked
+ * 
+ * @return: returns 0 if is made entirely out of digits and 1 if not 
+ */
+int isNumber(char *string);
 
 #endif

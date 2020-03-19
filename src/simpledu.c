@@ -7,7 +7,10 @@ int main(int argc, char const *argv[])
     simpledu *sd = createSimpledu();
 
     //printSimpledu(sd);
-    printUsage();
+    //printUsage();
+    printf("Is number: %d\n", isNumber("14253"));
+    printf("Is number: %d\n", isNumber("Atomate"));
+    printf("Is number: %d\n", isNumber("12eu1peixe"));
 
     destroySimpledu(sd);
 
@@ -32,6 +35,24 @@ simpledu *createSimpledu()
     return sd;
 }
 
+int isNumber(char *string)
+{
+    int s_size = strlen(string);
+
+    for (int i = 0; i < s_size; i++)
+    {
+        //printf("Char %c and isDigit %d\n", string[i], isdigit(string[i]));
+        if (isdigit(string[i]) == 0)
+            return 1;
+    }
+    return 0;
+}
+
+/*int isPath(char *path, int i)
+{
+    if (i == 2 && strcmp(path, ALL) != 0 && strcmp(path, BYTES) != 0 && strcmp(path, BLOCK_SIZE) != 0 &&)
+}*/
+
 int fillSimpledu(simpledu *sd, int argc, char const *argv[])
 {
     if (argc < 2)
@@ -49,15 +70,9 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
         else
         {
             sd->count_links_flag = 1;
-            if (argc == 2)
+
+            for (int i = 2; i < argc; i++)
             {
-                return 0;
-            }
-            else
-            {
-                for (int i = 2; i < argc; i++)
-                {
-                }
             }
         }
         return 0;
