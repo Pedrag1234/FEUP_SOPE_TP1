@@ -1,1 +1,2 @@
-127.00	-	5333	-	CREATE	-	./simpledu 
+535.00	-	6394	-	CREATE	-	./simpledu 
+1418.00	-	6394	-	EXIT	-	1

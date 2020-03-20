@@ -3,6 +3,7 @@
 
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,10 +30,11 @@ void createProcess(struct timeval mainStart, pid_t pid, const char ** args);
  * 
  * @param mainStart: the begining instant main was initiated, used to calculates ms since beginning
  * @param pid: process ID of the caller
+ * @param status: termination status of the exited process
  * 
  * @return: void
  * 
  */
-void exitProcess(struct timeval mainStart, pid_t pid);
+void exitProcess(struct timeval mainStart, pid_t pid, int status);
 
 #endif

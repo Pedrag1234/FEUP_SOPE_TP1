@@ -18,7 +18,19 @@ int main(int argc, char const *argv[])
 
     destroySimpledu(sd);
 
+    int pid, status;
     createProcess(start, getpid(), argv);
+    pid = fork();
+    if (pid != 0)   //PARENT
+    { 
+        wait(&status);     
+        /* wait for the child to terminate */
+        exitProcess(start, getpid(), status);
+    }
+    else   //CHILD
+    { 
+        exit(31);    /*exit with a silly number*/
+    }
 
     return 0;
 }
