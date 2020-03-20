@@ -1,7 +1,12 @@
 #include "simpledu.h"
+#include "log.h"
 
 int main(int argc, char const *argv[])
 {
+    struct timeval start;
+    gettimeofday(&start, NULL);
+    createFile();
+
     printf("Argc : %d | Argv = %s\n", argc, argv[0]);
 
     simpledu *sd = createSimpledu();
@@ -12,6 +17,8 @@ int main(int argc, char const *argv[])
     //printUsage();
 
     destroySimpledu(sd);
+
+    createProcess(start, getpid(), argv);
 
     return 0;
 }
