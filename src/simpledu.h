@@ -4,8 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include <ctype.h>
 #include "utils.h"
+#include "handler.h"
 
 #define MAX_PATH_LENGTH 256
 

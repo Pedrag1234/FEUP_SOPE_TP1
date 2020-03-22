@@ -1,17 +1,24 @@
 #include "simpledu.h"
 
+extern int terminated;
+
 int main(int argc, char const *argv[])
 {
     printf("Argc : %d | Argv = %s\n", argc, argv[0]);
 
-    simpledu *sd = createSimpledu();
+    struct sigaction signals;
+    sigemptyset(&signals.sa_mask);
+    signals.sa_flags = 0;
 
-    fillSimpledu(sd, argc, argv);
+    signals.sa_handler = initHandler;
+    sigaction(SIGINT, &signals, NULL);
 
-    printSimpledu(sd);
-    //printUsage();
+    while (!terminated)
+    {
+        /* code */
+    }
 
-    destroySimpledu(sd);
+    printf("It was able to get out of handler\n");
 
     return 0;
 }
