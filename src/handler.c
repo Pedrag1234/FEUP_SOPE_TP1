@@ -14,6 +14,7 @@ void INTHandler(int signo)
 
     char c;
     printf("Are you sure you want to exit? (Y)es/(N)o\n");
+    fflush(stdin);
     c = getchar();
     while (toupper(c) != 'Y' && toupper(c) != 'N')
     {
