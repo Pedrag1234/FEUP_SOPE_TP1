@@ -1,13 +1,16 @@
 #include "handler.h"
 
 int terminated = 0;
+extern int s_pid;
 
-void initHandler(int signo)
+void INTHandler(int signo)
 {
     if (signo != SIGINT)
     {
         return;
     }
+
+    kill(s_pid, SIGTSTP);
 
     char c;
     printf("Are you sure you want to exit? (Y)es/(N)o\n");
@@ -28,8 +31,26 @@ void initHandler(int signo)
 
     else if (toupper(c) == 'N')
     {
-
+        kill(s_pid, SIGCONT);
         printf("Resuming program\n");
         return;
     }
+}
+
+void TSTPHandler(int signo)
+{
+    if (signo != SIGTSTP)
+    {
+        return;
+    }
+    printf("[caught SIGTSTP]\n");
+}
+
+void CONTHandler(int signo)
+{
+    if (signo != SIGCONT)
+    {
+        return;
+    }
+    printf("[caught SIGCONT]\n");
 }

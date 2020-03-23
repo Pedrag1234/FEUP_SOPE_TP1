@@ -1,24 +1,41 @@
 #include "simpledu.h"
 
 extern int terminated;
+int s_pid = 0;
 
 int main(int argc, char const *argv[])
 {
+
     printf("Argc : %d | Argv = %s\n", argc, argv[0]);
 
-    struct sigaction signals;
-    sigemptyset(&signals.sa_mask);
-    signals.sa_flags = 0;
-
-    signals.sa_handler = initHandler;
-    sigaction(SIGINT, &signals, NULL);
-
-    while (!terminated)
+    pid_t pid = fork();
+    if (pid != 0)
     {
-        /* code */
+        signal(SIGINT, INTHandler);
+        sleep(1);
+        s_pid = pid;
+        printf("DAD\n");
+        while (!terminated)
+        {
+            /* code */
+        }
     }
-
-    printf("It was able to get out of handler\n");
+    else if (pid == 0)
+    {
+        signal(SIGINT, CONTHandler);
+        sleep(1);
+        signal(SIGINT, TSTPHandler);
+        sleep(1);
+        printf("SON\n");
+        while (!terminated)
+        {
+            printf("Working\n");
+            sleep(1);
+        }
+    }
+    else
+    {
+    }
 
     return 0;
 }

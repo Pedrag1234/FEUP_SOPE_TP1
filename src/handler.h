@@ -5,9 +5,13 @@
 #include <ctype.h>
 #include <signal.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <unistd.h>
 
-void initHandler(int signo);
+void INTHandler(int signo);
 
-//static void childHandler(int signo);
+void TSTPHandler(int signo);
+
+void CONTHandler(int signo);
 
 #endif
