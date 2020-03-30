@@ -6,6 +6,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "utils.h"
+#include "pipes.h"
 
 #define MAX_PATH_LENGTH 256
 

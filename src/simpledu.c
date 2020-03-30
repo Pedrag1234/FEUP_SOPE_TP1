@@ -2,16 +2,12 @@
 
 int main(int argc, char const *argv[])
 {
+    char resp[256];
     printf("Argc : %d | Argv = %s\n", argc, argv[0]);
 
-    simpledu *sd = createSimpledu();
+    cmd_2_str("du src", resp);
 
-    fillSimpledu(sd, argc, argv);
-
-    printSimpledu(sd);
-    //printUsage();
-
-    destroySimpledu(sd);
+    printf("Return  = %s", resp);
 
     return 0;
 }
