@@ -3,13 +3,15 @@
 
 #include "parser.h"
 
-long folderSize = 0;
+long folderSize;
+
+void initFT();
 
 /**
  * @brief: prints file path + size in bytes or in blocks according to simpledu args
  * 
  * @param sd: struct containing simpledu definition;
- * @param path: path to the file/directory;
+ * @param path: path to the file;
  * @param size: file size;
  * 
  * @return void;
@@ -38,5 +40,26 @@ int searchFile(simpledu * sd, char * fileName);
  * @return: number of directories
 */
 int searchDirectory(char * path, char direct[1024][256]);
+
+/**
+ * @brief: prints the directory info on the console
+ * 
+ * @param path: path to the desired directory
+ * @param sd: struct containing simpledu definition;
+ * 
+ * @return: none
+*/
+void printDirectory(char * path, simpledu * sd);
+
+/**
+ * @brief: build the command string to run on execXX() calls
+ * 
+ * @param sd: struct where the original instructions for simpledu are
+ * @param path: path of the original directory
+ * @param cmdstring: var where the built command string will be returned
+ * 
+ * @return: none
+*/
+void buildCmdstring(simpledu * sd, char * path, char * cmdstring);
 
 #endif
