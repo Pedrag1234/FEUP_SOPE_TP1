@@ -1,2 +1,2 @@
-535.00	-	6394	-	CREATE	-	./simpledu 
-1418.00	-	6394	-	EXIT	-	1
+0.38	-	6509	-	CREATE	-	./simpledu 
+0.68	-	6509	-	EXIT	-	0

@@ -3,8 +3,6 @@
 
 int main(int argc, char const *argv[])
 {
-    struct timeval start;
-    gettimeofday(&start, NULL);
     createFile();
 
     printf("Argc : %d | Argv = %s\n", argc, argv[0]);
@@ -18,14 +16,12 @@ int main(int argc, char const *argv[])
 
     destroySimpledu(sd);
 
-    int pid, status;
-    createProcess(start, getpid(), argv);
+    int pid;
+    createProcess(argv);
     pid = fork();
     if (pid != 0)   //PARENT
     { 
-        wait(&status);     
-        /* wait for the child to terminate */
-        exitProcess(start, getpid(), status);
+        exitProcess(0);
     }
     else   //CHILD
     { 
