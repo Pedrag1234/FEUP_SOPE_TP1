@@ -1,6 +1,11 @@
 #ifndef _PARSER_H_
 #define _PARSER_H_
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#include <dirent.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -75,7 +80,7 @@ void printUsage();
  * 
  * @param path: the string to be analyzed
  * 
- * @return: Returns 0 if the string isn't equal to the program options and 1 if false
+ * @return: -1 if invalid path, 0 if a file, 1 if a directory and 2 if a symbolic link
  */
 int isPath(const char *path);
 

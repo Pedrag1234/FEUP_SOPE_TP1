@@ -52,7 +52,7 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
 
             for (int i = 2; i < argc; i++)
             {
-                if (isPath(argv[i]) == 0 && i == 2)
+                if (isPath(argv[i]) >= 0 && i == 2)
                     strcpy(sd->path, argv[i]);
 
                 else if (strcmp(argv[i], ALL) == 0)
@@ -119,10 +119,22 @@ void printUsage()
 
 int isPath(const char *path)
 {
-    if (strcmp(path, ALL) != 0 && strcmp(path, BYTES) != 0 && strcmp(path, BLOCK_SIZE) != 0 && strcmp(path, SY_LINKS) != 0 && strcmp(path, SEP_DIRS) && strstr(path, MAX_DEPTH) == NULL)
-        return 0;
+    struct stat pathStat;
 
-    return 1;
+    // Invalid path
+    if (lstat(path, &pathStat) < 0)
+        return -1;
+    // Directory
+    else if (S_ISDIR(pathStat.st_mode))
+        return 1;
+    // File
+    else if (S_ISREG(pathStat.st_mode))
+        return 0;
+    // Symbolic Link
+    else if(S_ISLNK(pathStat.st_mode))
+        return 2;
+    else
+        return -1;
 }
 
 int getMaxDepth(const char *string)
