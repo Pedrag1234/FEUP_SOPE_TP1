@@ -13,7 +13,7 @@ int main(int argc, char const *argv[])
 
     initFT();
     char directories[1024][256];
-    char * cmdstring = malloc(sizeof(char*));
+    char *cmdstring = malloc(sizeof(char *));
     int status;
     if (sd->max_depth == 0)
     {
@@ -23,24 +23,24 @@ int main(int argc, char const *argv[])
     {
         unsigned numDir = searchDirectory(sd->path, directories);
 
-        for(unsigned i = 0; i < numDir; i++)
+        for (unsigned i = 0; i < numDir; i++)
         {
             pid_t pid;
             pid = fork();
 
-            if(pid < 0)
+            if (pid < 0)
             {
                 printf("Failed fork");
                 exit(-1);
             }
             else if (pid == 0)
             {
-                if(directories[i] != NULL)
+                if (directories[i] != NULL)
                 {
                     buildCmdstring(sd, directories[i], cmdstring);
 
                     //reruns the program with the new cmd and a decremented depth
-                    execl("/bin/sh", "/bin/sh", "-c", cmdstring, (char*)0);
+                    execl("/bin/sh", "/bin/sh", "-c", cmdstring, (char *)0);
                 }
 
                 //TODO: replace with exitProcess(0)
@@ -52,12 +52,12 @@ int main(int argc, char const *argv[])
 
                 //print path
                 printf("%s\n", directories[i]);
-            }           
+            }
         }
 
         printDirectory(sd->path, sd);
     }
-    
+
     destroySimpledu(sd);
     return 0;
 }
