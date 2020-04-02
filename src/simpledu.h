@@ -2,5 +2,6 @@
 #define _SIMPLEDU_H_
 
 #include "filetreking.h"
+#include "pipes.h"
 
 #endif

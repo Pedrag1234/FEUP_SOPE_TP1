@@ -12,6 +12,7 @@ void cmd_2_str(char *cmd, char *resp)
     }
 
     fgets(resp, MAX_RESP_SIZE, f);
+
     resp[strlen(resp) - 1] = '\0';
 
     fclose(f);

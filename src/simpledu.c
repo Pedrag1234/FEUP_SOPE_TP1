@@ -2,13 +2,15 @@
 
 int main(int argc, char const *argv[])
 {
-    printf("Argc : %d | Argv = %s\n", argc, argv[0]);
+    //printf("Argc : %d | Argv = %s\n", argc, argv[0]);
+
+    //char resp[256];
 
     simpledu *sd = createSimpledu();
 
     fillSimpledu(sd, argc, argv);
 
-    printSimpledu(sd);
+    //printSimpledu(sd);
     //printUsage();
 
     initFT();
@@ -35,10 +37,12 @@ int main(int argc, char const *argv[])
             }
             else if (pid == 0)
             {
+
                 if (directories[i] != NULL)
                 {
-                    buildCmdstring(sd, directories[i], cmdstring);
 
+                    buildCmdstring(sd, directories[i], cmdstring);
+                    //cmd_2_str(cmdstring, resp);
                     //reruns the program with the new cmd and a decremented depth
                     execl("/bin/sh", "/bin/sh", "-c", cmdstring, (char *)0);
                 }
@@ -49,12 +53,10 @@ int main(int argc, char const *argv[])
             else
             {
                 waitpid(pid, &status, 0);
-
                 //print path
                 printf("%s\n", directories[i]);
             }
         }
-
         printDirectory(sd->path, sd);
     }
 
