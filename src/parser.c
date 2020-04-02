@@ -58,10 +58,10 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
                 else if (strcmp(argv[i], ALL) == 0)
                     sd->all_flag = 1;
 
-                else if (strcmp(argv[i], BYTES) == 0)
+                else if (strcmp(argv[i], BYTES) == 0 && sd->block_size_flag != 1)
                     sd->byte_size_flag = 1;
 
-                else if (strcmp(argv[i], BLOCK_SIZE) == 0)
+                else if (strcmp(argv[i], BLOCK_SIZE) == 0 && sd->byte_size_flag != 1)
                 {
                     sd->block_size_flag = 1;
 
@@ -98,6 +98,16 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
                 }
             }
         }
+        if (sd->block_size_flag == 0 && sd->byte_size_flag == 0)
+        {
+            sd->block_size_flag = 1;
+            sd->block_size = 1024;
+        }
+        if (strlen(sd->path) == 0)
+        {
+            strcpy(sd->path, ".");
+        }
+
         return 0;
     }
 }
@@ -131,7 +141,7 @@ int isPath(const char *path)
     else if (S_ISREG(pathStat.st_mode))
         return 0;
     // Symbolic Link
-    else if(S_ISLNK(pathStat.st_mode))
+    else if (S_ISLNK(pathStat.st_mode))
         return 2;
     else
         return -1;
