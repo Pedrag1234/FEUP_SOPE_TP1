@@ -16,7 +16,7 @@ void initFT();
  * 
  * @return void;
 */
-void printFile(simpledu * sd, char * path, long size);
+void printFile(simpledu *sd, char *path, long size);
 
 /**
  * @todo: replace instances of exit(1) with exitProcess after importing log.h
@@ -28,7 +28,7 @@ void printFile(simpledu * sd, char * path, long size);
  * 
  * @return: 1 if failure, 0 if success
 */
-int searchFile(simpledu * sd, char * fileName);
+int searchFile(simpledu *sd, char *fileName);
 
 /**
  * @todo: replace instances of exit(1) with exitProcess after importing log.h
@@ -39,7 +39,7 @@ int searchFile(simpledu * sd, char * fileName);
  * 
  * @return: number of directories
 */
-int searchDirectory(char * path, char direct[1024][256]);
+int searchDirectory(char *path, char direct[1024][256]);
 
 /**
  * @brief: prints the directory info on the console
@@ -49,7 +49,7 @@ int searchDirectory(char * path, char direct[1024][256]);
  * 
  * @return: none
 */
-void printDirectory(char * path, simpledu * sd);
+int printDirectory(char *path, simpledu *sd);
 
 /**
  * @brief: build the command string to run on execXX() calls
@@ -60,6 +60,6 @@ void printDirectory(char * path, simpledu * sd);
  * 
  * @return: none
 */
-void buildCmdstring(simpledu * sd, char * path, char * cmdstring);
+void buildCmdstring(simpledu *sd, char *path, char *cmdstring);
 
 #endif

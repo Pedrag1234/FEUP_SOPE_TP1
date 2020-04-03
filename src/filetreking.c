@@ -50,7 +50,14 @@ int searchFile(simpledu *sd, char *fileName)
     }
 
     printFile(sd, fileName, file.st_size);
-    folderSize += file.st_size;
+    if (sd->byte_size_flag)
+    {
+        folderSize += file.st_size;
+    }
+    else
+    {
+        folderSize += file.st_size % sd->block_size == 0 ? file.st_size / sd->block_size : file.st_size / sd->block_size + 1;
+    }
 
     return 0;
 }
@@ -88,7 +95,7 @@ int searchDirectory(char *path, char direct[1024][256])
     return numDir;
 }
 
-void printDirectory(char *path, simpledu *sd)
+int printDirectory(char *path, simpledu *sd)
 {
     DIR *myDir;
     struct dirent *info;
@@ -113,8 +120,9 @@ void printDirectory(char *path, simpledu *sd)
             searchFile(sd, finalPath);
         }
     }
-
+    //printf("%s = %ld\n", path, folderSize);
     closedir(myDir);
+    return folderSize;
 }
 
 void buildCmdstring(simpledu *sd, char *path, char *cmdstring)
