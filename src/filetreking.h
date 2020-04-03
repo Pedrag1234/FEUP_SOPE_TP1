@@ -3,10 +3,6 @@
 
 #include "parser.h"
 
-long folderSize;
-
-void initFT();
-
 /**
  * @brief: prints file path + size in bytes or in blocks according to simpledu args
  * 
@@ -28,7 +24,7 @@ void printFile(simpledu * sd, char * path, long size);
  * 
  * @return: 1 if failure, 0 if success
 */
-int searchFile(simpledu * sd, char * fileName);
+int searchFile(simpledu * sd, char * fileName, long * folderSize);
 
 /**
  * @todo: replace instances of exit(1) with exitProcess after importing log.h
@@ -36,6 +32,7 @@ int searchFile(simpledu * sd, char * fileName);
  * @brief: search the provided directory in the path and stores the stream in direct
  * 
  * @param path: directory to search
+ * @param folderSize: reference to the var storing the size of the (sub)folders
  * 
  * @return: number of directories
 */
@@ -49,7 +46,7 @@ int searchDirectory(char * path, char direct[1024][256]);
  * 
  * @return: none
 */
-void printDirectory(char * path, simpledu * sd);
+void printDirectory(char * path, simpledu * sd, long * folderSize);
 
 /**
  * @brief: build the command string to run on execXX() calls
