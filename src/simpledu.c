@@ -14,7 +14,6 @@ int main(int argc, char const *argv[])
     fillSimpledu(sd, argc, argv);
 
     //printSimpledu(sd);
-    //printUsage();
 
     int slots[2];
     pipe(slots);
@@ -28,15 +27,14 @@ int main(int argc, char const *argv[])
     }
     else
     {
-        unsigned numDir = searchDirectory(sd->path, directories);
+        int numDir = searchDirectory(sd->path, directories);
         char buf[1024];
-        long subFolder;
+        //long subFolder;
 
-        for (unsigned i = 0; i < numDir; i++)
+        for (int i = 0; i < numDir; i++)
         {
             pid_t pid;
             pid = fork();
-            printf("%d", pid);
 
             if (pid < 0)
             {
@@ -53,7 +51,6 @@ int main(int argc, char const *argv[])
                 {
 
                     buildCmdstring(sd, directories[i], cmdstring);
-                    //cmd_2_str(cmdstring, resp);
                     //reruns the program with the new cmd and a decremented depth
                     execl("/bin/sh", "/bin/sh", "-c", cmdstring, (char *)0);
                 }
@@ -73,16 +70,18 @@ int main(int argc, char const *argv[])
                 }
 
                 //searches for the last newline escape char
-                char *nbuf = strrchr(buf, '\n');
-                nbuf = nbuf + 1;
+                //char *nbuf = strrchr(buf, '\n');
+                //char * new_buf = nbuf + 1;
 
                 //exchange print for meaningful one
-                printf("\nSize in last line - %s\n", nbuf);
+                /*
+                printf("\nSize in last line - %s\n", new_buf);
 
-                char *tok = strtok(nbuf, " \t\0");
+                char *tok = strtok(new_buf, " \t\0");
                 subFolder = atol(tok);
                 printf("Size of subfolder - %ld\n", subFolder);
                 folderSize = subFolder;
+                */
 
                 //print path
                 printf("%s\n", directories[i]);
@@ -92,6 +91,6 @@ int main(int argc, char const *argv[])
         printDirectory(sd->path, sd, &folderSize);
     }
 
-    destroySimpledu(sd);
+    //destroySimpledu(sd);
     return 0;
 }

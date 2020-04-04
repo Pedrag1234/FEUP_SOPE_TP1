@@ -109,7 +109,7 @@ void printDirectory(char *path, simpledu *sd, long * folderSize)
         }
     }
 
-    //printFile(sd, path, folderSize);
+    printFile(sd, path, * folderSize);
     closedir(myDir);
 }
 
