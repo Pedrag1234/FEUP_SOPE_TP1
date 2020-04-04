@@ -5,10 +5,10 @@
 
 
 int s_pid = 0;
+extern long folderSize;
 
 int main(int argc, char const *argv[])
 {
-    long folderSize = 0;
 
     signal(SIGINT, INTHandler);
     signal(SIGTSTP, TSTPHandler);
@@ -26,7 +26,8 @@ int main(int argc, char const *argv[])
     int status;
     if (sd->max_depth == 0)
     {
-        printDirectory(sd->path, sd, &folderSize);
+        printDirectory(sd->path, sd);
+        exit(0);
     }
     else
     {
@@ -64,7 +65,7 @@ int main(int argc, char const *argv[])
             else
             {
                 close(slots[WRITE]);
-                waitpid(pid, &status, 0);
+                while(waitpid(pid, &status, 0) > 0);
 
                 ssize_t len;
                 while ((len = read(slots[READ], &buf, sizeof(buf))))
@@ -91,10 +92,11 @@ int main(int argc, char const *argv[])
                 printf("%s\n", directories[i]);
             }
         }
-
-        printDirectory(sd->path, sd, &folderSize);
+        
+        printDirectory(sd->path, sd);
+        printf("%ld\n", folderSize);
     }
 
-    //destroySimpledu(sd);
+    destroySimpledu(sd);
     return 0;
 }

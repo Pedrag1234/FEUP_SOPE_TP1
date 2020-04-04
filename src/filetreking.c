@@ -1,5 +1,7 @@
 #include "filetreking.h"
 
+long folderSize = 0;
+
 void printFile(simpledu *sd, char *path, long size)
 {
     //check if print in bytes
@@ -15,7 +17,7 @@ void printFile(simpledu *sd, char *path, long size)
     printf("%s\n", path);
 }
 
-int searchFile(simpledu *sd, char *fileName, long * folderSize)
+int searchFile(simpledu *sd, char *fileName)
 {
     struct stat file;
     char buf[1024];
@@ -83,7 +85,7 @@ int searchDirectory(char *path, char direct[1024][256])
     return numDir;
 }
 
-void printDirectory(char *path, simpledu *sd, long * folderSize)
+void printDirectory(char *path, simpledu *sd)
 {
     DIR *myDir;
     struct dirent *info;
@@ -105,11 +107,11 @@ void printDirectory(char *path, simpledu *sd, long * folderSize)
 
         if (isPath(finalPath) == 2 || isPath(finalPath) == 0)
         {
-            searchFile(sd, finalPath, folderSize);
+            searchFile(sd, finalPath);
         }
     }
 
-    printFile(sd, path, * folderSize);
+    printFile(sd, path, folderSize);
     closedir(myDir);
 }
 
