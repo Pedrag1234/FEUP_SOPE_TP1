@@ -7,13 +7,13 @@ int main(int argc, char const *argv[])
 {
     long folderSize = 0;
 
-    printf("Argc : %d | Argv = %s\n", argc, argv[0]);
+    signal(SIGINT, INTHandler);
+    signal(SIGTSTP, TSTPHandler);
+    signal(SIGCONT, CONTHandler);
 
     simpledu *sd = createSimpledu();
 
     fillSimpledu(sd, argc, argv);
-
-    //printSimpledu(sd);
 
     int slots[2];
     pipe(slots);
@@ -46,7 +46,6 @@ int main(int argc, char const *argv[])
                 //creates copy of fd in slots[1]
                 dup2(slots[WRITE], STDOUT_FILENO);
                 close(slots[READ]);
-
                 if (directories[i] != NULL)
                 {
 
@@ -69,12 +68,13 @@ int main(int argc, char const *argv[])
                     printf("%s", buf);
                 }
 
+                /*
+                buf[len] = '\0';
                 //searches for the last newline escape char
-                //char *nbuf = strrchr(buf, '\n');
-                //char * new_buf = nbuf + 1;
+                char *nbuf = strrchr(buf, '\n');
+                char * new_buf = nbuf + 1;
 
                 //exchange print for meaningful one
-                /*
                 printf("\nSize in last line - %s\n", new_buf);
 
                 char *tok = strtok(new_buf, " \t\0");
