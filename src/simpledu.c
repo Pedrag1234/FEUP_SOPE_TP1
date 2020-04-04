@@ -3,6 +3,9 @@
 #define READ 0
 #define WRITE 1
 
+
+int s_pid = 0;
+
 int main(int argc, char const *argv[])
 {
     long folderSize = 0;
@@ -44,6 +47,7 @@ int main(int argc, char const *argv[])
             else if (pid == 0)
             {
                 //creates copy of fd in slots[1]
+                s_pid = pid;
                 dup2(slots[WRITE], STDOUT_FILENO);
                 close(slots[READ]);
                 if (directories[i] != NULL)
