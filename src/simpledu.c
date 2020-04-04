@@ -1,10 +1,13 @@
 #include "simpledu.h"
 
+#define READ 0
+#define WRITE 1
+
 int main(int argc, char const *argv[])
 {
-    //printf("Argc : %d | Argv = %s\n", argc, argv[0]);
+    long folderSize = 0;
 
-    //char resp[256];
+    printf("Argc : %d | Argv = %s\n", argc, argv[0]);
 
     simpledu *sd = createSimpledu();
 
@@ -13,22 +16,27 @@ int main(int argc, char const *argv[])
     //printSimpledu(sd);
     //printUsage();
 
-    initFT();
+    int slots[2];
+    pipe(slots);
+
     char directories[1024][256];
     char *cmdstring = malloc(sizeof(char *));
     int status;
     if (sd->max_depth == 0)
     {
-        printDirectory(sd->path, sd);
+        printDirectory(sd->path, sd, &folderSize);
     }
     else
     {
         unsigned numDir = searchDirectory(sd->path, directories);
+        char buf[1024];
+        long subFolder;
 
         for (unsigned i = 0; i < numDir; i++)
         {
             pid_t pid;
             pid = fork();
+            printf("%d", pid);
 
             if (pid < 0)
             {
@@ -37,6 +45,9 @@ int main(int argc, char const *argv[])
             }
             else if (pid == 0)
             {
+                //creates copy of fd in slots[1]
+                dup2(slots[WRITE], STDOUT_FILENO);
+                close(slots[READ]);
 
                 if (directories[i] != NULL)
                 {
@@ -52,12 +63,33 @@ int main(int argc, char const *argv[])
             }
             else
             {
+                close(slots[WRITE]);
                 waitpid(pid, &status, 0);
+
+                ssize_t len;
+                while ((len = read(slots[READ], &buf, sizeof(buf))))
+                {
+                    printf("%s", buf);
+                }
+
+                //searches for the last newline escape char
+                char *nbuf = strrchr(buf, '\n');
+                nbuf = nbuf + 1;
+
+                //exchange print for meaningful one
+                printf("\nSize in last line - %s\n", nbuf);
+
+                char *tok = strtok(nbuf, " \t\0");
+                subFolder = atol(tok);
+                printf("Size of subfolder - %ld\n", subFolder);
+                folderSize = subFolder;
+
                 //print path
                 printf("%s\n", directories[i]);
             }
         }
-        printDirectory(sd->path, sd);
+
+        printDirectory(sd->path, sd, &folderSize);
     }
 
     destroySimpledu(sd);
