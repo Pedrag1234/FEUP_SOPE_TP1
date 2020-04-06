@@ -3,6 +3,39 @@
 
 #include "parser.h"
 
+void debug(int test);
+
+//holds all info related to a certain path
+typedef struct {
+    char path[128];
+    struct stat info;
+
+}pathInfo;
+
+typedef struct{
+    pathInfo * paths;
+    int length;
+    int size;
+}Container;
+
+
+/**
+ * @brief: calculates depth of the given path
+ * 
+ * @param path: path to calculate depth
+ * 
+ * @return: calculated depth
+*/
+unsigned depth(char * path);
+
+/**
+ * @brief: prints all files/directories sent to it according to the program flags
+ * 
+ * @return: none
+ * 
+*/
+void printAll(simpledu * sd, Container * container);
+
 /**
  * @brief: prints file path + size in bytes or in blocks according to simpledu args
  * 
@@ -17,46 +50,14 @@ void printFile(simpledu * sd, char * path, long size);
 /**
  * @todo: replace instances of exit(1) with exitProcess after importing log.h
  * 
- * @brief: searches for the given file, and then orders its printing
- * 
- * @param sd: struct containing simpledu definition;
- * @param fileName: name of the file to be searched
- * 
- * @return: 1 if failure, 0 if success
-*/
-int searchFile(simpledu * sd, char * fileName);
-
-/**
- * @todo: replace instances of exit(1) with exitProcess after importing log.h
- * 
  * @brief: search the provided directory in the path and stores the stream in direct
  * 
- * @param path: directory to search
+ * @param dirPath: path to the file (necessary because of recursion);
+ * @param sd: struct containing simpledu definition;
  * @param folderSize: reference to the var storing the size of the (sub)folders
  * 
  * @return: number of directories
 */
-int searchDirectory(char * path, char direct[1024][256]);
-
-/**
- * @brief: prints the directory info on the console
- * 
- * @param path: path to the desired directory
- * @param sd: struct containing simpledu definition;
- * 
- * @return: none
-*/
-void printDirectory(char * path, simpledu * sd);
-
-/**
- * @brief: build the command string to run on execXX() calls
- * 
- * @param sd: struct where the original instructions for simpledu are
- * @param path: path of the original directory
- * @param cmdstring: var where the built command string will be returned
- * 
- * @return: none
-*/
-void buildCmdstring(simpledu * sd, char * path, char * cmdstring);
+int searchDirectory(char * dirPath, simpledu * sd, Container * container);
 
 #endif

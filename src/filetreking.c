@@ -1,6 +1,47 @@
 #include "filetreking.h"
 
-long folderSize = 0;
+#define READ 0
+#define WRITE 1
+
+void debug(int test)
+{
+    printf("Hello %d\n", test);
+    test++;
+}
+
+unsigned depth(char * path)
+{
+    unsigned count = 0;
+    for(unsigned i = 0; path[i] != '\0'; i++){
+        if(path[i] == '/') count ++;
+    }
+    
+    return count;
+}
+
+void printAll(simpledu * sd, Container * container)
+{
+    char * path;
+    printf("%d\n", container->length);
+    for(int i = 0; i < container->length; i++)
+    {
+        path = container->paths[i].path;
+        if(depth(path) <= sd->max_depth)
+        {
+            int size = container->paths[i].info.st_size;
+            if(sd->all_flag)
+            {
+                printFile(sd, path, size);
+                printf("%d\n", depth(path));
+            }
+            else if(S_ISDIR(container->paths[i].info.st_mode))
+            {
+                printFile(sd, path, size);
+                printf("%d\n", depth(path));
+            }
+        }
+    }
+}
 
 void printFile(simpledu *sd, char *path, long size)
 {
@@ -17,144 +58,131 @@ void printFile(simpledu *sd, char *path, long size)
     printf("%s\n", path);
 }
 
-int searchFile(simpledu *sd, char *fileName)
+int searchDirectory(char * dirPath, simpledu * sd, Container * container)
 {
-    struct stat file;
-    char buf[1024];
-    //signed size type, capable of holding -1 in case of errors
-    ssize_t len;
+    DIR *myDir;
+    struct dirent *info;
+    struct stat pathStat;
 
-    if (stat(fileName, &file) < 0)
+    if (( myDir = opendir(sd->path)) == NULL)
     {
-        perror("Error reading file stat struct");
-        //replace with exitProcess(1) when importing log.h
+        printf("Error: cannot open provided directory: %s\n", sd->path);
+        //replace with exitProcess(1)
         exit(1);
     }
 
-    //handling symbolic stuff
-    if (isPath(fileName) == 2 && sd->deference_flag)
+    //new working directory
+    chdir(sd->path);
+
+    while ((info = readdir(myDir)) != NULL)
     {
-        lstat(fileName, &file);
-        if ((len = readlink(fileName, buf, sizeof(buf) - 1)) != -1)
-        {
-            //null terminator
-            buf[len] = '\0';
-            strcat(fileName, "/");
-            strcat(fileName, buf);
-        }
+
+        if(sd->deference_flag)
+            stat(info->d_name, &pathStat);
         else
-            perror("Error in reading symbolic link");
-    }
+            lstat(info->d_name, &pathStat);
 
-    printFile(sd, fileName, file.st_size);
-    folderSize += file.st_size;
-
-    return 0;
-}
-
-int searchDirectory(char *path, char direct[1024][256])
-{
-    DIR *myDir;
-    struct dirent *info;
-    char finalPath[256];
-
-    int numDir = 0;
-    myDir = opendir(path);
-    if (myDir == NULL)
-    {
-        perror("Error: cannot open provided directory");
-        //replace with exitProcess(1)
-        exit(1);
-    }
-
-    while ((info = readdir(myDir)) != 0)
-    {
         //setup path to use
-        strcpy(finalPath, path);
+        char finalPath[256] = "";
+        strcpy(finalPath, dirPath);
         strcat(finalPath, "/");
         strcat(finalPath, info->d_name);
 
-        if (isPath(finalPath) == 1 && strcmp(info->d_name, ".") && strcmp(info->d_name, ".."))
-        {
-            strcpy(direct[numDir], finalPath);
-            numDir++;
+        //regular file (.txt, .jpg, .c, etc)
+        if(S_ISREG(pathStat.st_mode))
+        {   
+            //allocates space in array for new pathInfo entity
+            if(container->length == container->size)
+            {
+                container->paths = realloc(container->paths, 2* container->size * sizeof(pathInfo));
+                container->size *= 2;
+            }
+
+            //adds new entry to container and pathInfo simultaneously
+            strcpy(container->paths[container->length].path, finalPath);
+            container->paths[container->length].info = pathStat;
+            container->length = container->length + 1;
+            printf("%d\n", container->length);
+        }
+        //folders
+        else if(S_ISDIR(pathStat.st_mode))
+        {   
+            //update with new path because of recursion
+            strcpy(sd->path, info->d_name);
+
+            //goes to next iter of the loop
+            if( strcmp(info->d_name, ".") == 0 || strcmp(info->d_name, "..") == 0) continue;
+
+            pid_t pids[256];
+            unsigned pidCounter = 0;
+
+            //setup read/write slots
+            int slots[2];
+            pipe(slots);
+            
+            //add createProcess() for logging here!!
+            pids[pidCounter] = fork();
+
+            if(pids[pidCounter] < 0)
+            {
+                printf("Error: could not fork.\n");
+                //replace with exitProcess(-1)
+                exit(-1);
+            }
+            //child
+            else if (pids[pidCounter] == 0)
+            {
+                //recursiveness here (notice all args have already been updated previously)
+                searchDirectory(finalPath, sd, container);
+
+                close(slots[READ]);
+                write(slots[WRITE], &container->size, sizeof(unsigned));
+                write(slots[WRITE], container->paths, sizeof(pathInfo) * (container->size));
+                
+                //replace with exitProcess(0)
+                exit(0);
+            }
+            else
+            {
+                //wait for pids to die
+                int status;
+                for (unsigned i = 0; i <= pidCounter; i++)
+                    waitpid(pids[i], &status, 0);
+
+                pidCounter++;
+
+                int size;
+                close(slots[WRITE]);
+                read(slots[READ],&size,sizeof(int));
+                
+                while(size > container->size)
+                {
+                  container->paths = realloc(container->paths, 2 * container->size * sizeof(pathInfo));
+                }
+
+                container->paths = realloc(container->paths, size * sizeof(pathInfo));
+                read(slots[READ], container->paths, sizeof(pathInfo) * size);
+                container->size = size;
+            }
+
+            //allocates space in array for new pathInfo entity
+            if(container->length == container->size)
+            {
+                container->paths = realloc(container->paths, 2* container->size * sizeof(pathInfo));
+                container->size *= 2;
+            }
+
+            //adding THIS directory to array
+            strcpy(container->paths[container->length].path, finalPath);
+            container->paths[container->length].info = pathStat;
+            container->length = container->length + 1;
+            printf("%d\n", container->length);
         }
     }
+    
+    //repeats procces for above directory
+    chdir("..");
 
     closedir(myDir);
-    return numDir;
-}
-
-void printDirectory(char *path, simpledu *sd)
-{
-    DIR *myDir;
-    struct dirent *info;
-    char finalPath[256];
-
-    myDir = opendir(path);
-    if (myDir == NULL)
-    {
-        perror("Error: cannot open provided directory");
-        //replace with exitProcess(1)
-        exit(1);
-    }
-
-    while ((info = readdir(myDir)) != 0)
-    {
-        strcpy(finalPath, path);
-        strcat(finalPath, "/");
-        strcat(finalPath, info->d_name);
-
-        if (isPath(finalPath) == 2 || isPath(finalPath) == 0)
-        {
-            searchFile(sd, finalPath);
-        }
-    }
-
-    printFile(sd, path, folderSize);
-    closedir(myDir);
-}
-
-void buildCmdstring(simpledu *sd, char *path, char *cmdstring)
-{
-    char cmd[256];
-    char buf[256];
-
-    strncpy(cmd, "./simpledu -l ", sizeof("./simpledu -l "));
-    strcat(cmd, path);
-
-    if (sd->all_flag)
-    {
-        strcat(cmd, " -a");
-    }
-    if (sd->byte_size_flag)
-    {
-        strcat(cmd, " -b");
-    }
-    if (sd->block_size_flag)
-    {
-        strcat(cmd, " -B ");
-        sprintf(buf, "%d", sd->block_size);
-        strcat(cmd, buf);
-    }
-    if (sd->count_links_flag)
-    {
-        strcat(cmd, " -l");
-    }
-    if (sd->deference_flag)
-    {
-        strcat(cmd, " -L");
-    }
-    if (sd->directory_flag)
-    {
-        strcat(cmd, " -S");
-    }
-    if (sd->max_depth > 0)
-    {
-        strcat(cmd, " --max-depth=");
-        sprintf(buf, "%d", sd->max_depth - 1);
-        strcat(cmd, buf);
-    }
-
-    strcpy(cmdstring, cmd);
+    return 0;
 }
