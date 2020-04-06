@@ -3,30 +3,17 @@
 
 #include "parser.h"
 
-void debug(int test);
-
 //holds all info related to a certain path
-typedef struct {
-    char path[128];
-    struct stat info;
-
+typedef struct pathInfo{
+  struct stat info;
+  char path[100];
 }pathInfo;
 
-typedef struct{
-    pathInfo * paths;
-    int length;
-    int size;
+typedef struct container{
+    pathInfo * objects; //array of objects
+    int length; //index aka number of objects
+    int size; //max_size of objects array -> updated if needed
 }Container;
-
-
-/**
- * @brief: calculates depth of the given path
- * 
- * @param path: path to calculate depth
- * 
- * @return: calculated depth
-*/
-unsigned depth(char * path);
 
 /**
  * @brief: prints all files/directories sent to it according to the program flags
@@ -35,6 +22,19 @@ unsigned depth(char * path);
  * 
 */
 void printAll(simpledu * sd, Container * container);
+
+/**
+ * @todo: replace instances of exit(1) with exitProcess after importing log.h
+ * 
+ * @brief: search the provided directory in the path and stores the stream in direct
+ * 
+ * @param dirPath: path to the file (necessary because of recursion);
+ * @param sd: struct containing simpledu definition;
+ * @param container: where all directories/files are stored for later printing
+ * 
+ * @return: number of directories
+*/
+int searchDirectory(char * dirPath, simpledu * sd, Container * container);
 
 /**
  * @brief: prints file path + size in bytes or in blocks according to simpledu args
@@ -48,16 +48,12 @@ void printAll(simpledu * sd, Container * container);
 void printFile(simpledu * sd, char * path, long size);
 
 /**
- * @todo: replace instances of exit(1) with exitProcess after importing log.h
+ * @brief: calculates depth of the given path
  * 
- * @brief: search the provided directory in the path and stores the stream in direct
+ * @param path: path to calculate depth
  * 
- * @param dirPath: path to the file (necessary because of recursion);
- * @param sd: struct containing simpledu definition;
- * @param folderSize: reference to the var storing the size of the (sub)folders
- * 
- * @return: number of directories
+ * @return: calculated depth
 */
-int searchDirectory(char * dirPath, simpledu * sd, Container * container);
+int depth(char * path);
 
 #endif

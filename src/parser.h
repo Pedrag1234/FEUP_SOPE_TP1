@@ -34,7 +34,7 @@ typedef struct
     int deference_flag;
     int directory_flag;
     int max_depth_flag;
-    unsigned int max_depth;
+    int max_depth;
 } simpledu;
 
 /** 

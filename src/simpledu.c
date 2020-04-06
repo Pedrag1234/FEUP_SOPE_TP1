@@ -15,19 +15,16 @@ int main(int argc, char const *argv[])
     fillSimpledu(sd, argc, argv);
     printSimpledu(sd);
 
-    //chdir(sd->path);
+    Container info;
+    info.objects = malloc(sizeof(pathInfo) * 32);
+    info.length = 0;
+    info.size = 32;
 
-    Container paths;
-    paths.size = 32;
-    paths.paths = malloc(sizeof(pathInfo) * paths.size);
-    paths.length = 0;
+    searchDirectory(".", sd, &info);
 
-    searchDirectory(".", sd, &paths);
-
-    printAll(sd, &paths);
-
+    printAll(sd, &info);
+    free(info.objects);
     destroySimpledu(sd);
-    free(paths.paths);
 
     return 0;
 }
