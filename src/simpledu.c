@@ -1,19 +1,19 @@
 #include "simpledu.h"
 
-int s_pid = 0;
+extern pid_t s_pid[1024];
+extern int s_cnt;
 
 int main(int argc, char const *argv[])
 {
-    /*
+
     signal(SIGINT, INTHandler);
     signal(SIGTSTP, TSTPHandler);
     signal(SIGCONT, CONTHandler);
-    */
 
     simpledu *sd = createSimpledu();
 
     fillSimpledu(sd, argc, argv);
-    printSimpledu(sd);
+    //printSimpledu(sd);
 
     Container info;
     info.objects = malloc(sizeof(pathInfo) * 32);

@@ -24,3 +24,11 @@ char *subString(const char *input, int offset, int len, char *dest)
     strncpy(dest, input + offset, len);
     return dest;
 }
+
+void copyArray(int *dst, int *src)
+{
+    for (int i = 0; i < 1024; i++)
+    {
+        dst[i] = src[i];
+    }
+}

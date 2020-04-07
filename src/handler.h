@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 /**
  * @brief: When the process receives SIGINT the user should confirm if the program should terminate or not

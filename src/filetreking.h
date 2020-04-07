@@ -2,18 +2,21 @@
 #define _FILETREKING_H_
 
 #include "parser.h"
+#include "handler.h"
 
 //holds all info related to a certain path
-typedef struct pathInfo{
+typedef struct pathInfo
+{
   struct stat info;
   char path[100];
-}pathInfo;
+} pathInfo;
 
-typedef struct container{
-    pathInfo * objects; //array of objects
-    int length; //index aka number of objects
-    int size; //max_size of objects array -> updated if needed
-}Container;
+typedef struct container
+{
+  pathInfo *objects; //array of objects
+  int length;        //index aka number of objects
+  int size;          //max_size of objects array -> updated if needed
+} Container;
 
 /**
  * @brief: prints all files/directories sent to it according to the program flags
@@ -21,7 +24,7 @@ typedef struct container{
  * @return: none
  * 
 */
-void printAll(simpledu * sd, Container * container);
+void printAll(simpledu *sd, Container *container);
 
 /**
  * @todo: replace instances of exit(1) with exitProcess after importing log.h
@@ -34,7 +37,7 @@ void printAll(simpledu * sd, Container * container);
  * 
  * @return: number of directories
 */
-int searchDirectory(char * dirPath, simpledu * sd, Container * container);
+int searchDirectory(char *dirPath, simpledu *sd, Container *container);
 
 /**
  * @brief: prints file path + size in bytes or in blocks according to simpledu args
@@ -45,7 +48,7 @@ int searchDirectory(char * dirPath, simpledu * sd, Container * container);
  * 
  * @return void;
 */
-void printFile(simpledu * sd, char * path, long size);
+void printFile(simpledu *sd, char *path, long size);
 
 /**
  * @brief: calculates depth of the given path
@@ -54,6 +57,6 @@ void printFile(simpledu * sd, char * path, long size);
  * 
  * @return: calculated depth
 */
-int depth(char * path);
+int depth(char *path);
 
 #endif

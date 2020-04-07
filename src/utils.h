@@ -25,4 +25,6 @@ int isNumber(const char *string);
   */
 char *subString(const char *input, int offset, int len, char *dest);
 
+void copyArray(int *dst, int *src);
+
 #endif

@@ -1,7 +1,9 @@
 #include "handler.h"
 
 int terminated = 0;
-extern int s_pid;
+
+pid_t s_pid[1024];
+int s_cnt = 0;
 
 void INTHandler(int signo)
 {
@@ -10,7 +12,17 @@ void INTHandler(int signo)
         return;
     }
 
-    kill(s_pid, SIGTSTP);
+    for (size_t i = 0; i < 1024; i++)
+    {
+        if (s_pid[i] > 0)
+        {
+            kill(s_pid[i], SIGTSTP);
+        }
+        else
+        {
+            break;
+        }
+    }
 
     char c;
     printf("Are you sure you want to exit? (Y)es/(N)o\n");
@@ -27,12 +39,23 @@ void INTHandler(int signo)
     {
         terminated = 1;
         printf("Exiting\n");
-        return;
+        exit(0);
     }
 
     else if (toupper(c) == 'N')
     {
-        kill(s_pid, SIGCONT);
+
+        for (size_t i = 0; i < 1024; i++)
+        {
+            if (s_pid[i] > 0)
+            {
+                kill(s_pid[i], SIGCONT);
+            }
+            else
+            {
+                break;
+            }
+        }
         printf("Resuming program\n");
         return;
     }
