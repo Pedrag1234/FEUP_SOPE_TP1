@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+void INTAggregateHandler(int signo);
+
 /**
  * @brief: When the process receives SIGINT the user should confirm if the program should terminate or not
  * 
@@ -16,7 +18,9 @@
  * 
  * @TODO: add register to logs
   */
-void INTHandler(int signo);
+void INTHandler1(int signo);
+
+void INTHandler2(int signo);
 
 /**
  * @brief: Handles SIGTSTP 

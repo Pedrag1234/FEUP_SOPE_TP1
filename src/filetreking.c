@@ -3,8 +3,10 @@
 #define READ 0
 #define WRITE 1
 
+extern pid_t c_pid;
 extern pid_t s_pid[1024];
 extern int s_cnt;
+extern int handlerflag;
 
 int depth(char path[])
 {
@@ -53,7 +55,7 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
   DIR *myDir;
   struct dirent *info;
   struct stat pathStat;
-  //printf("Is working %d\n", s_pid[0]);
+  signal(SIGINT, INTAggregateHandler);
 
   myDir = opendir(sd->path);
   if (myDir == NULL)
@@ -67,6 +69,7 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
 
   while ((info = readdir(myDir)) != NULL)
   {
+
     if (sd->deference_flag)
       lstat(info->d_name, &pathStat);
     else
@@ -102,15 +105,15 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
       pid_t pids[1024];
       int pCounter = 0, slots[2];
       pipe(slots);
+      printf("Ctrl c - now\n");
       pids[pCounter] = fork();
-      printf("pCounter = %d || pid[%d] = %d\n", pCounter, pCounter, pids[0]);
+
+      handlerflag = 1;
       if (pids[pCounter] > 0)
       {
         s_pid[s_cnt] = pids[pCounter];
         s_cnt++;
       }
-
-      printf("pCounter = %d || pid[%d] = %d\n", pCounter, pCounter, pids[0]);
 
       sleep(1);
       if (pids[pCounter] < 0)
@@ -120,7 +123,8 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
       }
       else if (pids[pCounter] == 0)
       {
-
+        signal(SIGTSTP, TSTPHandler);
+        signal(SIGCONT, CONTHandler);
         searchDirectory(finalPath, sd, container);
         close(slots[READ]);
         //send info to father proc
@@ -131,7 +135,6 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
       }
       else
       {
-        signal(SIGINT, INTHandler);
         int status;
         for (int i = 0; i <= pCounter; i++)
         {

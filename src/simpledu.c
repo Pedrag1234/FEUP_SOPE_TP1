@@ -1,14 +1,12 @@
 #include "simpledu.h"
 
+pid_t c_pid;
 extern pid_t s_pid[1024];
 extern int s_cnt;
 
 int main(int argc, char const *argv[])
 {
-
-    signal(SIGINT, INTHandler);
-    signal(SIGTSTP, TSTPHandler);
-    signal(SIGCONT, CONTHandler);
+    c_pid = getpid();
 
     simpledu *sd = createSimpledu();
 
