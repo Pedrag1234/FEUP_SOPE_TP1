@@ -6,12 +6,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h> 
-#include <string.h> 
+#include <unistd.h>
+#include <string.h>
 #include <time.h>
 
 #define DEFAULT "log.txt"
-
 
 /**
  * @brief: begins time counting and sets up the file
@@ -25,7 +24,7 @@ void createFile();
  * 
  * @return: void
  */
-void createProcess(const char ** args);
+void createProcess(const char **args);
 
 /**
  * @brief: registers termination of a process by its father process on the register log file
@@ -55,5 +54,32 @@ void recieveSignal(int signal);
  * @return: void
 */
 void sendSignal(int signal, pid_t pid);
+
+/**
+ * @brief: register when a pipe message is received
+ * 
+ * @param pipemsg: message received
+ * 
+ * @return: void
+*/
+void receivePipe(int pipemsg);
+
+/**
+ * @brief: register when a pipe message is sent
+ * 
+ * @param pipemsg: message sent
+ * 
+ * @return: void
+*/
+void sendPipe(int pipemsg);
+
+/**
+ * @brief: register when a folder size is calculated
+ * 
+ * @param entryRes: Byte/Block size followed by path
+ * 
+ * @return: void
+*/
+void entry(const char *entryRes);
 
 #endif
