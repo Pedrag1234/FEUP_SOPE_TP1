@@ -71,12 +71,12 @@ void recieveSignal(int signal)
 void sendSignal(int signal, pid_t pid)
 {
     clock_t stop = clock();
-    pid_t pid = getpid();
+    pid_t pid2 = getpid();
     file = fopen(fileName, "a");
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
 
     //instant - pid - SEND_SIGNAL - Signal signal sent to pid
-    fprintf(file, "%.2lf\t-\t%d\t-\tRECV_SIGNAL\t-\tSignal %d sent to %d\n", time, pid, signal, pid);
+    fprintf(file, "%.2lf\t-\t%d\t-\tRECV_SIGNAL\t-\tSignal %d sent to %d\n", time, pid2, signal, pid);
 
     fclose(file);
 }

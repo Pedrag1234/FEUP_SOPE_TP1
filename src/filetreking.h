@@ -3,6 +3,7 @@
 
 #include "parser.h"
 #include "handler.h"
+#include "log.h"
 
 //holds all info related to a certain path
 typedef struct pathInfo

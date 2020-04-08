@@ -25,6 +25,7 @@ void INTHandler1(int signo)
     {
         if (s_pid[i] > 0)
         {
+            sendSignal(SIGSTOP, s_pid[i]);
             kill(s_pid[i], SIGTSTP);
         }
         else
@@ -51,19 +52,18 @@ void INTHandler1(int signo)
         exit(0);
     }
 
-        else if (toupper(c) == 'N')
+    else if (toupper(c) == 'N')
     {
-        printf("Entered if\n");
+
         for (size_t i = 0; i < 1024; i++)
         {
             if (s_pid[i] > 0)
             {
-                printf("Is here on kill\n");
+                sendSignal(SIGCONT, s_pid[i]);
                 kill(s_pid[i], SIGCONT);
             }
             else
             {
-                printf("Is here on break\n");
                 break;
             }
         }
@@ -110,7 +110,11 @@ void TSTPHandler(int signo)
     {
         return;
     }
-    printf("[caught SIGTSTP]\n");
+    recieveSignal(SIGTSTP);
+    while (terminated != 1)
+    {
+        /* code */
+    }
 }
 
 void CONTHandler(int signo)
@@ -119,5 +123,5 @@ void CONTHandler(int signo)
     {
         return;
     }
-    printf("[caught SIGCONT]\n");
+    recieveSignal(SIGCONT);
 }

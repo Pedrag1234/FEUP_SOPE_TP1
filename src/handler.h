@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "log.h"
 
 void INTAggregateHandler(int signo);
 

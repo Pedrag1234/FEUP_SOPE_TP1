@@ -7,6 +7,8 @@ extern int s_cnt;
 
 int main(int argc, char const *argv[])
 {
+    createFile();
+
     c_pid = getpid();
 
     simpledu *sd = createSimpledu();
@@ -18,24 +20,13 @@ int main(int argc, char const *argv[])
     info.objects = malloc(sizeof(pathInfo) * 32);
     info.length = 0;
     info.size = 32;
-
+    createProcess(argv);
     searchDirectory(".", sd, &info);
 
     printAll(sd, &info);
     free(info.objects);
     destroySimpledu(sd);
 
-    int pid;
-    createProcess(argv);
-    pid = fork();
-    if (pid != 0) //PARENT
-    {
-        exitProcess(0);
-    }
-    else //CHILD
-    {
-        exit(31); /*exit with a silly number*/
-    }
-
+    exitProcess(0);
     return 0;
 }

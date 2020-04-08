@@ -61,6 +61,7 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
   if (myDir == NULL)
   {
     printf("Error: unable to open directory %s", sd->path);
+    exitProcess(1);
     exit(1);
   }
 
@@ -119,6 +120,7 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
       if (pids[pCounter] < 0)
       {
         printf("Error: could not fork %d\n", pCounter);
+        exitProcess(1);
         exit(1);
       }
       else if (pids[pCounter] == 0)
@@ -128,9 +130,10 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
         searchDirectory(finalPath, sd, container);
         close(slots[READ]);
         //send info to father proc
+
         write(slots[WRITE], &container->length, sizeof(int));
         write(slots[WRITE], container->objects, sizeof(pathInfo) * (container->length));
-
+        exitProcess(0);
         exit(0);
       }
       else
