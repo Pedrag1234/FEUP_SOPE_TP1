@@ -86,7 +86,6 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
                     sd->max_depth_flag = 1;
 
                     int j = getMaxDepth(argv[i]);
-
                     if (j < 0)
                     {
                         printUsage();
@@ -159,26 +158,17 @@ int getMaxDepth(const char *string)
         char number[26];
         strcpy(number, "");
         int i = strlen(MAX_DEPTH);
+        int n2 = 0;
         //printf("%c\n", string[i]);
+        n2 = atoi(&string[i]);
 
-        while (string[i] >= '0' && string[i] <= '9')
-        {
-            char temp[1];
-
-            temp[0] = string[i];
-
-            strcat(number, temp);
-            i++;
-        }
-
-        //printf("%s\n", number);
         //Remover este printf faz com que a funçaõ deixe de funcionar
         //printf("Number=> (%s,%ld)|| isNumber = %d\n", number, strlen(number), isNumber(number));
 
-        if (isNumber(number) == 0)
+        if (n2 > 0)
         {
             //printf("Number = %s\n", number);
-            return atoi(number);
+            return n2;
         }
         else
         {

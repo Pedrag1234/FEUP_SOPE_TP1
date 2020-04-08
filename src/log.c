@@ -14,10 +14,8 @@ void createFile()
         strcpy(fileName, getenv("LOG_FILENAME"));
 
     fd = open(fileName, O_WRONLY | O_CREAT | O_APPEND);
-
     if (fd < 0)
     {
-        printf("here\n");
         perror("Error: file not found!\n");
         exit(1);
     }
@@ -74,25 +72,25 @@ void sendSignal(int signal, pid_t pid)
     write(fd, log, strlen(log));
 }
 
-void receivePipe(int pipemsg)
+void receivePipe(const char *pipemsg)
 {
     clock_t stop = clock();
     pid_t pid = getpid();
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
     char log[256];
     //instant - pid - RECV_PIPE - Message Received
-    sprintf(log, "%.2lf\t-\t%d\t-\tRECV_PIPE\t-\tMessage received: %d\n", time, pid, pipemsg);
+    sprintf(log, "%.2lf\t-\t%d\t-\tRECV_PIPE\t-\tMessage received: %s\n", time, pid, pipemsg);
     write(fd, log, strlen(log));
 }
 
-void sendPipe(int pipemsg)
+void sendPipe(const char *pipemsg)
 {
     clock_t stop = clock();
     pid_t pid = getpid();
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
     char log[256];
     //instant - pid - SEND_PIPE - Message Received
-    sprintf(log, "%.2lf\t-\t%d\t-\tRECV_PIPE\t-\tMessage sent: %d\n", time, pid, pipemsg);
+    sprintf(log, "%.2lf\t-\t%d\t-\tRECV_PIPE\t-\tMessage sent: %s\n", time, pid, pipemsg);
     write(fd, log, strlen(log));
 }
 

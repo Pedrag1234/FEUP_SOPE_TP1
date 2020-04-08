@@ -106,7 +106,6 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
       pid_t pids[1024];
       int pCounter = 0, slots[2];
       pipe(slots);
-      printf("Ctrl c - now\n");
       pids[pCounter] = fork();
 
       handlerflag = 1;
@@ -116,7 +115,6 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
         s_cnt++;
       }
 
-      sleep(1);
       if (pids[pCounter] < 0)
       {
         printf("Error: could not fork %d\n", pCounter);
@@ -132,7 +130,9 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
         //send info to father proc
 
         write(slots[WRITE], &container->length, sizeof(int));
+        sendPipe("Address of container lenght");
         write(slots[WRITE], container->objects, sizeof(pathInfo) * (container->length));
+        sendPipe("Array of objects of container");
         exitProcess(0);
         exit(0);
       }
@@ -149,12 +149,13 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
         int index;
         close(slots[1]);
         read(slots[0], &index, sizeof(int));
-
+        receivePipe("Address of container lenght");
         while (index > container->size)
           container->objects = realloc(container->objects, 2 * container->size * sizeof(pathInfo));
 
         //update information
         read(slots[0], container->objects, sizeof(pathInfo) * (index));
+        receivePipe("Array of objects of container");
         container->length = index;
       }
 

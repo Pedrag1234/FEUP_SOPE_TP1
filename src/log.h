@@ -65,7 +65,7 @@ void sendSignal(int signal, pid_t pid);
  * 
  * @return: void
 */
-void receivePipe(int pipemsg);
+void receivePipe(const char *pipemsg);
 
 /**
  * @brief: register when a pipe message is sent
@@ -74,7 +74,7 @@ void receivePipe(int pipemsg);
  * 
  * @return: void
 */
-void sendPipe(int pipemsg);
+void sendPipe(const char *pipemsg);
 
 /**
  * @brief: register when a folder size is calculated
