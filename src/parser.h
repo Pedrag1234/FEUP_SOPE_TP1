@@ -16,11 +16,16 @@
 #define MAX_PATH_LENGTH 256
 
 #define ALL "-a"
+#define ALL_ALT "-all"
 #define BYTES "-b"
+#define BYTES_ALT "-bytes"
 #define BLOCK_SIZE "-B"
+#define BLOCK_SIZE_ALT "--block-size="
 #define C_LINKS "-l"
 #define SY_LINKS "-L"
+#define SY_LINKS_ALT "--count-links"
 #define SEP_DIRS "-S"
+#define SEP_DIRS_ALT "--separate-dirs"
 #define MAX_DEPTH "--max-depth="
 
 typedef struct

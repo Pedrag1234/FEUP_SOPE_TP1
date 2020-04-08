@@ -14,7 +14,7 @@ int main(int argc, char const *argv[])
     simpledu *sd = createSimpledu();
 
     fillSimpledu(sd, argc, argv);
-    //printSimpledu(sd);
+    printSimpledu(sd);
 
     Container info;
     info.objects = malloc(sizeof(pathInfo) * 32);

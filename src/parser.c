@@ -55,30 +55,48 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
                 if (isPath(argv[i]) >= 0 && i == 2)
                     strcpy(sd->path, argv[i]);
 
-                else if (strcmp(argv[i], ALL) == 0)
+                else if (strcmp(argv[i], ALL) == 0 || strcmp(argv[i], ALL_ALT) == 0)
                     sd->all_flag = 1;
 
-                else if (strcmp(argv[i], BYTES) == 0 && sd->block_size_flag != 1)
+                else if ((strcmp(argv[i], BYTES) == 0 || strcmp(argv[i], BYTES_ALT) == 0) && sd->block_size_flag != 1)
                     sd->byte_size_flag = 1;
 
-                else if (strcmp(argv[i], BLOCK_SIZE) == 0 && sd->byte_size_flag != 1)
+                else if ((strcmp(argv[i], BLOCK_SIZE) == 0 || strstr(argv[i], BLOCK_SIZE_ALT) != NULL) && sd->byte_size_flag != 1)
                 {
                     sd->block_size_flag = 1;
 
-                    if ((i + 1 >= argc) || isNumber(argv[i + 1]) != 0)
+                    if (strstr(argv[i], BLOCK_SIZE_ALT) != NULL)
                     {
-                        printUsage();
-                        return 1;
+                        int j = strlen(BLOCK_SIZE_ALT);
+                        int n = 0;
+                        n = atoi(&argv[i][j]);
+                        if (n == 0)
+                        {
+                            printUsage();
+                            return 1;
+                        }
+                        else
+                        {
+                            sd->block_size = n;
+                        }
                     }
-
                     else
-                        sd->block_size = atoi(argv[i + 1]);
+                    {
+                        if ((i + 1 >= argc) || isNumber(argv[i + 1]) != 0)
+                        {
+                            printUsage();
+                            return 1;
+                        }
+
+                        else
+                            sd->block_size = atoi(argv[i + 1]);
+                    }
                 }
 
-                else if (strcmp(argv[i], SY_LINKS) == 0)
+                else if (strcmp(argv[i], SY_LINKS) == 0 || strcmp(argv[i], SY_LINKS_ALT) == 0)
                     sd->deference_flag = 1;
 
-                else if (strcmp(argv[i], SEP_DIRS) == 0)
+                else if (strcmp(argv[i], SEP_DIRS) == 0 || strcmp(argv[i], SEP_DIRS_ALT) == 0)
                     sd->directory_flag = 1;
 
                 else if (strstr(argv[i], MAX_DEPTH) != NULL)
@@ -124,7 +142,7 @@ void destroySimpledu(simpledu *sd)
 
 void printUsage()
 {
-    printf("Usage: ./simpledu -l <path> <-a|-all> <-b|-bytes> <-B size|--block-size=SIZE> <-L|--count-links> <-S|--separate dirs> <--max-depth=N>\n");
+    printf("Usage: ./simpledu -l <path> <-a|-all> <-b|-bytes> <-B size|--block-size=SIZE> <-L|--count-links> <-S|--separate-dirs> <--max-depth=N>\n");
 }
 
 int isPath(const char *path)
