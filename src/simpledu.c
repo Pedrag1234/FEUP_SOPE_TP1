@@ -1,4 +1,5 @@
 #include "simpledu.h"
+#include "log.h"
 
 pid_t c_pid;
 extern pid_t s_pid[1024];
@@ -23,6 +24,18 @@ int main(int argc, char const *argv[])
     printAll(sd, &info);
     free(info.objects);
     destroySimpledu(sd);
+
+    int pid;
+    createProcess(argv);
+    pid = fork();
+    if (pid != 0) //PARENT
+    {
+        exitProcess(0);
+    }
+    else //CHILD
+    {
+        exit(31); /*exit with a silly number*/
+    }
 
     return 0;
 }
