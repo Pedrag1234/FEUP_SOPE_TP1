@@ -1,6 +1,6 @@
 #include "log.h"
 
-FILE *file;
+int fd;
 char fileName[256];
 clock_t start;
 
@@ -13,109 +13,101 @@ void createFile()
     else
         strcpy(fileName, getenv("LOG_FILENAME"));
 
-    file = fopen(fileName, "w");
+    fd = open(fileName, O_WRONLY | O_CREAT | O_APPEND);
 
-    if (file == NULL)
+    if (fd < 0)
     {
+        printf("here\n");
         perror("Error: file not found!\n");
         exit(1);
     }
-
-    fclose(file);
 }
 
 void createProcess(const char **args)
 {
     clock_t stop = clock();
     pid_t pid = getpid();
-    file = fopen(fileName, "a");
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
+    char log[256], cmd[256];
 
-    //instant - pid - CREATE - args
-    fprintf(file, "%.2lf\t-\t%d\t-\tCREATE\t-\t", time, pid);
     while (*args)
-        fprintf(file, "%s ", *args++);
-    fprintf(file, "\n");
-
-    fclose(file);
+    {
+        char temp[256];
+        strcpy(temp, *args++);
+        strcat(temp, " ");
+        strcat(cmd, temp);
+    }
+    sprintf(log, "%.2lf\t-\t%d\t-\tCREATE\t-\t%s\n", time, pid, cmd);
+    write(fd, log, strlen(log));
 }
 
 void exitProcess(int exitStatus)
 {
     clock_t stop = clock();
     pid_t pid = getpid();
-    file = fopen(fileName, "a");
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
-
+    char log[256];
     //instant - pid - EXIT - status
-    fprintf(file, "%.2lf\t-\t%d\t-\tEXIT\t-\t%d\n", time, pid, exitStatus);
-
-    fclose(file);
-
-    exit(exitStatus);
+    sprintf(log, "%.2lf\t-\t%d\t-\tEXIT\t-\t%d\n", time, pid, exitStatus);
+    write(fd, log, strlen(log));
 }
 
 void recieveSignal(int signal)
 {
     clock_t stop = clock();
     pid_t pid = getpid();
-    file = fopen(fileName, "a");
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
-
+    char log[256];
     //instant - pid - RECV_SIGNAL - signal
-    fprintf(file, "%.2lf\t-\t%d\t-\tRECV_SIGNAL\t-\t%d\n", time, pid, signal);
-
-    fclose(file);
+    sprintf(log, "%.2lf\t-\t%d\t-\tRECV_SIGNAL\t-\t%d\n", time, pid, signal);
+    write(fd, log, strlen(log));
 }
 
 void sendSignal(int signal, pid_t pid)
 {
     clock_t stop = clock();
     pid_t pid2 = getpid();
-    file = fopen(fileName, "a");
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
-
+    char log[256];
     //instant - pid - SEND_SIGNAL - Signal signal sent to pid
-    fprintf(file, "%.2lf\t-\t%d\t-\tRECV_SIGNAL\t-\tSignal %d sent to %d\n", time, pid2, signal, pid);
-
-    fclose(file);
+    sprintf(log, "%.2lf\t-\t%d\t-\tRECV_SIGNAL\t-\tSignal %d sent to %d\n", time, pid2, signal, pid);
+    write(fd, log, strlen(log));
 }
 
 void receivePipe(int pipemsg)
 {
     clock_t stop = clock();
     pid_t pid = getpid();
-    file = fopen(fileName, "a");
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
-
+    char log[256];
     //instant - pid - RECV_PIPE - Message Received
-    fprintf(file, "%.2lf\t-\t%d\t-\tRECV_PIPE\t-\tMessage received: %d\n", time, pid, pipemsg);
-
-    fclose(file);
+    sprintf(log, "%.2lf\t-\t%d\t-\tRECV_PIPE\t-\tMessage received: %d\n", time, pid, pipemsg);
+    write(fd, log, strlen(log));
 }
 
 void sendPipe(int pipemsg)
 {
     clock_t stop = clock();
     pid_t pid = getpid();
-    file = fopen(fileName, "a");
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
-
+    char log[256];
     //instant - pid - SEND_PIPE - Message Received
-    fprintf(file, "%.2lf\t-\t%d\t-\tRECV_PIPE\t-\tMessage sent: %d\n", time, pid, pipemsg);
-
-    fclose(file);
+    sprintf(log, "%.2lf\t-\t%d\t-\tRECV_PIPE\t-\tMessage sent: %d\n", time, pid, pipemsg);
+    write(fd, log, strlen(log));
 }
 
 void entry(const char *entryRes)
 {
     clock_t stop = clock();
     pid_t pid = getpid();
-    file = fopen(fileName, "a");
     float time = (stop - start) / (CLOCKS_PER_SEC / (double)1000.0);
-
+    char log[256];
     //instant - pid - ENTRY - Bytes/Blocks followed by Path
-    fprintf(file, "%.2lf\t-\t%d\t-\tENTRY\t-\t%s\n", time, pid, entryRes);
+    sprintf(log, "%.2lf\t-\t%d\t-\tENTRY\t-\t%s\n", time, pid, entryRes);
+    write(fd, log, strlen(log));
+}
 
-    fclose(file);
+void CloseFile()
+{
+    close(fd);
 }

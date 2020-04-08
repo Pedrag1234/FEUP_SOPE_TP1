@@ -9,6 +9,9 @@
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #define DEFAULT "log.txt"
 
@@ -81,5 +84,10 @@ void sendPipe(int pipemsg);
  * @return: void
 */
 void entry(const char *entryRes);
+
+/**
+ * @brief: closes log file
+ */
+void CloseFile();
 
 #endif

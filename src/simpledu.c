@@ -28,5 +28,6 @@ int main(int argc, char const *argv[])
     destroySimpledu(sd);
 
     exitProcess(0);
+    CloseFile();
     return 0;
 }
