@@ -1,16 +1,17 @@
 #ifndef _LOG_H_
 #define _LOG_H_
 
+
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <math.h>
 #include <fcntl.h>
 
 #define DEFAULT "log.txt"
@@ -89,5 +90,7 @@ void entry(const char *entryRes);
  * @brief: closes log file
  */
 void CloseFile();
+
+
 
 #endif
