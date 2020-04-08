@@ -1,22 +1,22 @@
-0.31	-	5921	-	CREATE		-	./simpledu -l src/TEST -a -b --max-depth=4 
-1.03	-	5923	-	SEND_PIPE	-	Message sent: Address of container lenght
-0.97	-	5923	-	SEND_PIPE	-	Message sent: Array of objects of container
-0.96	-	5923	-	EXIT		-	0
-0.31	-	5921	-	CREATE		-	./simpledu -l src/TEST -a -b --max-depth=4 
-0.81	-	5922	-	RECV_PIPE	-	Message received: Address of container lenght
-0.74	-	5922	-	RECV_PIPE	-	Message received: Array of objects of container
-0.65	-	5922	-	SEND_PIPE	-	Message sent: Address of container lenght
-0.64	-	5922	-	SEND_PIPE	-	Message sent: Array of objects of container
-0.63	-	5922	-	EXIT		-	0
-0.31	-	5921	-	CREATE		-	./simpledu -l src/TEST -a -b --max-depth=4 
-0.66	-	5921	-	RECV_PIPE	-	Message received: Address of container lenght
-0.70	-	5921	-	RECV_PIPE	-	Message received: Array of objects of container
-1.08	-	5924	-	SEND_PIPE	-	Message sent: Address of container lenght
-1.03	-	5924	-	SEND_PIPE	-	Message sent: Array of objects of container
-1.02	-	5924	-	EXIT		-	0
-0.31	-	5921	-	CREATE		-	./simpledu -l src/TEST -a -b --max-depth=4 
-0.66	-	5921	-	RECV_PIPE	-	Message received: Address of container lenght
-0.70	-	5921	-	RECV_PIPE	-	Message received: Array of objects of container
-0.99	-	5921	-	RECV_PIPE	-	Message received: Address of container lenght
-1.02	-	5921	-	RECV_PIPE	-	Message received: Array of objects of container
-1.20	-	5921	-	EXIT		-	0
+0.38	-	6439	-	CREATE		-	./simpledu --count-links src/TEST --bytes --max-depth=4 
+1.03	-	6441	-	SEND_PIPE	-	Message sent: Address of container lenght
+0.95	-	6441	-	SEND_PIPE	-	Message sent: Array of objects of container
+0.94	-	6441	-	EXIT		-	0
+0.38	-	6439	-	CREATE		-	./simpledu --count-links src/TEST --bytes --max-depth=4 
+0.82	-	6440	-	RECV_PIPE	-	Message received: Address of container lenght
+0.75	-	6440	-	RECV_PIPE	-	Message received: Array of objects of container
+0.66	-	6440	-	SEND_PIPE	-	Message sent: Address of container lenght
+0.65	-	6440	-	SEND_PIPE	-	Message sent: Array of objects of container
+0.65	-	6440	-	EXIT		-	0
+0.38	-	6439	-	CREATE		-	./simpledu --count-links src/TEST --bytes --max-depth=4 
+0.74	-	6439	-	RECV_PIPE	-	Message received: Address of container lenght
+0.77	-	6439	-	RECV_PIPE	-	Message received: Array of objects of container
+1.04	-	6442	-	SEND_PIPE	-	Message sent: Address of container lenght
+0.97	-	6442	-	SEND_PIPE	-	Message sent: Array of objects of container
+0.96	-	6442	-	EXIT		-	0
+0.38	-	6439	-	CREATE		-	./simpledu --count-links src/TEST --bytes --max-depth=4 
+0.74	-	6439	-	RECV_PIPE	-	Message received: Address of container lenght
+0.77	-	6439	-	RECV_PIPE	-	Message received: Array of objects of container
+1.04	-	6439	-	RECV_PIPE	-	Message received: Address of container lenght
+1.09	-	6439	-	RECV_PIPE	-	Message received: Array of objects of container
+1.21	-	6439	-	EXIT		-	0

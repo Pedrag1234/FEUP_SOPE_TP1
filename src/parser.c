@@ -41,7 +41,7 @@ int fillSimpledu(simpledu *sd, int argc, char const *argv[])
     }
     else
     {
-        if (strcmp(argv[1], C_LINKS) != 0)
+        if (strcmp(argv[1], C_LINKS) != 0 && strcmp(argv[1], C_LINKS_ALT) != 0)
         {
             printUsage();
             return 1;
