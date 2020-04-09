@@ -111,10 +111,10 @@ void TSTPHandler(int signo)
         return;
     }
     recieveSignal(SIGTSTP);
-    while (terminated != 1)
+    /*while (terminated != 1)
     {
-        /* code */
-    }
+       
+    }*/
 }
 
 void CONTHandler(int signo)
