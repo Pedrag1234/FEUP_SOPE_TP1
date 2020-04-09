@@ -49,6 +49,18 @@ void INTHandler1(int signo)
     {
         terminated = 1;
         printf("Exiting\n");
+        for (size_t i = 0; i < 1024; i++)
+        {
+            if (s_pid[i] > 0)
+            {
+                sendSignal(SIGTERM, s_pid[i]);
+                kill(s_pid[i], SIGTERM);
+            }
+            else
+            {
+                break;
+            }
+        }
         exit(0);
     }
 

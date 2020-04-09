@@ -150,6 +150,7 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
         for (int i = 0; i <= pCounter; i++)
         {
           waitpid(pids[i], &status, 0); //waiting for each child to terminate
+          sleep(1);
         }
 
         pCounter++;
