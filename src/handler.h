@@ -10,17 +10,28 @@
 #include <stdlib.h>
 #include "log.h"
 
-void INTAggregateHandler(int signo);
-
 /**
- * @brief: When the process receives SIGINT the user should confirm if the program should terminate or not
+ * @brief: Aggregate handler of INTHandler1 and INTHandler2
  * 
  * @param signo: The signal received
  * 
- * @TODO: add register to logs
+  */
+void INTAggregateHandler(int signo);
+
+/**
+ * @brief: When the process receives SIGINT the user should confirm if the program should terminate or not (if in fork)
+ * 
+ * @param signo: The signal received
+ * 
   */
 void INTHandler1(int signo);
 
+/**
+ * @brief: When the process receives SIGINT the user should confirm if the program should terminate or not (if not in fork)
+ * 
+ * @param signo: The signal received
+ * 
+  */
 void INTHandler2(int signo);
 
 /**
@@ -28,7 +39,6 @@ void INTHandler2(int signo);
  * 
  * @param signo: The signal received
  * 
- * @TODO: add register to logs
   */
 void TSTPHandler(int signo);
 
@@ -37,7 +47,6 @@ void TSTPHandler(int signo);
  * 
  * @param signo: The signal received
  * 
- * @TODO: add register to logs
   */
 void CONTHandler(int signo);
 

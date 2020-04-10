@@ -56,7 +56,8 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
   DIR *myDir;
   struct dirent *info;
   struct stat pathStat;
-  //signal(SIGINT, INTAggregateHandler);
+
+  //Installing INT handler
   signals.sa_handler = INTAggregateHandler;
   sigaction(SIGINT, &signals, NULL);
 
@@ -125,17 +126,18 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
       }
       else if (pids[pCounter] == 0)
       {
-        //signal(SIGTSTP, TSTPHandler);
+        //Installing TSTP handler
         signals.sa_handler = TSTPHandler;
         sigaction(SIGTSTP, &signals, NULL);
-        //signal(SIGCONT, CONTHandler);
+
+        //Installing CONT handler
         signals.sa_handler = CONTHandler;
         sigaction(SIGCONT, &signals, NULL);
 
         searchDirectory(finalPath, sd, container);
         close(slots[READ]);
-        //send info to father proc
 
+        //send info to father proc
         write(slots[WRITE], &container->length, sizeof(int));
         sendPipe("Address of container lenght");
         write(slots[WRITE], container->objects, sizeof(pathInfo) * (container->length));
