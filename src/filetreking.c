@@ -66,7 +66,6 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
   {
     printf("Error: unable to open directory %s", sd->path);
     exitProcess(1);
-    exit(1);
   }
 
   //change to new working directory (works better for recursiveness smh)
@@ -122,7 +121,6 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
       {
         printf("Error: could not fork %d\n", pCounter);
         exitProcess(1);
-        exit(1);
       }
       else if (pids[pCounter] == 0)
       {
@@ -143,7 +141,6 @@ int searchDirectory(char *dirPath, simpledu *sd, Container *container)
         write(slots[WRITE], container->objects, sizeof(pathInfo) * (container->length));
         sendPipe("Array of objects of container");
         exitProcess(0);
-        exit(0);
       }
       else
       {

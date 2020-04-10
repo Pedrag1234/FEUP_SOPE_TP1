@@ -31,7 +31,6 @@ int main(int argc, char const *argv[])
     free(info.objects);
     destroySimpledu(sd);
 
-    exitProcess(0);
     CloseFile();
-    return 0;
+    exitProcess(0);
 }
